@@ -79,13 +79,6 @@ class MusicService: Service(), MediaPlayer.OnPreparedListener, MediaPlayer.OnErr
         }
     }
 
-    private fun getSortedSongs() {
-
-        val player = MediaPlayer.create(this, Settings.System.DEFAULT_RINGTONE_URI)
-        mPlayer?.start()
-    }
-
-
 
     override fun onStart(intent: Intent?, startId: Int) {
         super.onStart(intent, startId)
@@ -114,13 +107,13 @@ class MusicService: Service(), MediaPlayer.OnPreparedListener, MediaPlayer.OnErr
     private fun playSong(){
         Log.d(TAG, "song event received::play")
         PLAY_INITIALLY = true
-        //initMusicPlayer()
+        initMusicPlayer()
         mPlayer?.start()
     }
     private fun stopSong(){
         Log.d(TAG, "song event received::stop")
         PLAY_INITIALLY = false
-        mPlayer?.stop()
+        destroyPlayer()
     }
 
 
@@ -199,6 +192,13 @@ class MusicService: Service(), MediaPlayer.OnPreparedListener, MediaPlayer.OnErr
         intent.action = action
         return PendingIntent.getBroadcast(applicationContext, 0, intent, 0)
     }
+
+    private fun destroyPlayer() {
+        mPlayer?.stop()
+        mPlayer?.release()
+        mPlayer = null
+    }
+
 
 
 }
