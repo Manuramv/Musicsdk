@@ -31,7 +31,14 @@ internal class MusicService: Service(), MediaPlayer.OnPreparedListener, MediaPla
         private var mPlayer: MediaPlayer? = null
         private lateinit var contentIntentActivity: Activity
 
+        /**
+         * getting the song playing stats to display the music play time
+         */
         fun getIsPlaying() = mPlayer?.isPlaying == true
+        /**
+         * Method to set the setContentIntentActivity for the notification
+         * @param activity - setContentIntentActivity, Activity to be opened when clicking on the notification
+         */
         fun setContentIntentActivity(activity: Activity)  {
             contentIntentActivity = activity
         }
@@ -47,7 +54,11 @@ internal class MusicService: Service(), MediaPlayer.OnPreparedListener, MediaPla
         initMusicPlayer()
     }
 
-
+    /**
+     * When music app request to start service/component this method gets invoked
+     * @param intent - Intent of the specific operations to do.
+     * in our case play ,pause, stop music and get songs.
+     */
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
         Log.d("tag","inside onStartCommand::"+ intent.action)
         val action = intent.action
@@ -58,12 +69,14 @@ internal class MusicService: Service(), MediaPlayer.OnPreparedListener, MediaPla
             GETSONGS -> getAllSongs()
             PLAYSELECTEDSONGFROMLIST -> playSelectedSongFromList(intent)
         }
-
         setupNotification()
         return START_NOT_STICKY
 
     }
-
+    /**
+     * Method to get all the songs from device
+     * It will return the success callback to the end user if it's found any songs else failure callback
+     */
     private fun getAllSongs() {
         musicFiles = FileUtils.getAllAudios(this)
         if(!musicFiles.isNullOrEmpty())
@@ -71,7 +84,10 @@ internal class MusicService: Service(), MediaPlayer.OnPreparedListener, MediaPla
         else
             ListnerConstant.musicFilesListner.onError(Error(getString(R.string.song_loaded_error)))
     }
-
+    /**
+     * Method to play the selected song from the list
+     * @param intent Pass the index of the song as intent
+     */
     private fun playSelectedSongFromList(intent: Intent) {
         if(!musicFiles.isNullOrEmpty()){
             //val filename = "android.resource://" + this.packageName + "/raw/numsong"
@@ -87,6 +103,9 @@ internal class MusicService: Service(), MediaPlayer.OnPreparedListener, MediaPla
     }
 
 
+    /**
+     * Initalizing the music player and playing the user selected song
+     */
     fun initMusicPlayer(){
         if (mPlayer != null) {
             return
@@ -111,22 +130,29 @@ internal class MusicService: Service(), MediaPlayer.OnPreparedListener, MediaPla
     }
 
     override fun onCompletion(mp: MediaPlayer?) {
-        //mp?.start()
     }
 
 
-    //play song
+    /**
+     * Method to set the setContentIntentActivity for the notification
+     * @param activity - setContentIntentActivity, Activity to be opened when clicking on the notification
+     */
     private fun playSong(){
         Log.d(TAG, "song event received::play")
         initMusicPlayer()
         mPlayer?.start()
     }
+    /**
+     * Method to stop the song and destroy the player
+     */
     private fun stopSong(){
         Log.d(TAG, "song event received::stop")
         destroyPlayer()
     }
 
-
+    /**
+     * Method to pause the song
+     */
     private fun pauseSong(){
         Log.d(TAG, "song event received::stop")
         mPlayer?.pause()
@@ -134,12 +160,16 @@ internal class MusicService: Service(), MediaPlayer.OnPreparedListener, MediaPla
 
     }
 
+    /**
+     * Method to set up the notification and starting the foreground notification. since we are targetting for OS version greater than 8 not handling the lower version cases.
+     * Adding the action icons and pending intent.
+     *
+     */
     @SuppressLint("NewApi")
     private fun setupNotification() {
         val title = "Thales Music Player" //later read the  name from the music
         val artist = getFileName(mCurrentSong?.name?:"") //later read the  name from the music
-        /*val artist = mCurrSong?.artist ?: ""
-        val playPauseIcon = if (getIsPlaying()) R.drawable.ic_pause_vector else R.drawable.ic_play_vector*/
+        /*val artist = mCurrSong?.artist ?: ""*/
 
         var notifWhen = 0L
         var showWhen = false
@@ -204,6 +234,9 @@ internal class MusicService: Service(), MediaPlayer.OnPreparedListener, MediaPla
         return PendingIntent.getBroadcast(applicationContext, 0, intent, 0)
     }
 
+    /**
+     * Destroy the music player and release the memory
+     */
     private fun destroyPlayer() {
         mPlayer?.stop()
         mPlayer?.release()
