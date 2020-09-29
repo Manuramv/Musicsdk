@@ -3,4 +3,5 @@
     <string name="play">PLay</string>
     <string name="pause">Pause</string>
     <string name="stop">Stop</string>
+    <string name="song_loaded_error">Something went wrong, Couldn\'t load the song</string>
 </resources>

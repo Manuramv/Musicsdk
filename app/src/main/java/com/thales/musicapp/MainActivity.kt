@@ -9,14 +9,17 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.*
 import com.thales.musicapp.musicsdk.MusicProvider
+import com.thales.musicapp.musicsdk.models.Song
 import com.thales.musicapp.musicsdk.utils.GETSONGS
+import com.thales.musicapp.musicsdk.utils.MusicFilesListner
 import com.thales.musicapp.musicsdk.utils.PLAYSONG
 import com.thales.musicapp.musicsdk.utils.STOPSONG
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity() , MusicFilesListner {
     private val TAG = "MainActivity"
     private val RECORD_REQUEST_CODE = 101
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,7 +34,16 @@ class MainActivity : AppCompatActivity() {
             MusicProvider.stopSong(this,STOPSONG)
         })
         getSongs.setOnClickListener({
-            MusicProvider.stopSong(this, GETSONGS)
+            MusicProvider.getSongs(this, object :MusicFilesListner{
+                override fun songLoaded(songs: List<Song>) {
+                    Log.d(TAG,"song loaded::"+songs)
+                }
+
+                override fun onError(error: Throwable) {
+                    Log.d(TAG,"song loaded onError::"+error)
+                }
+
+            })
         })
 
 
@@ -70,5 +82,13 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    override fun songLoaded(songs: List<Song>) {
+        Log.d(TAG,"song loaded in act::"+songs)
+    }
+
+    override fun onError(error: Throwable) {
+        Log.d(TAG,"song loaded onError in act::"+error)
     }
 }

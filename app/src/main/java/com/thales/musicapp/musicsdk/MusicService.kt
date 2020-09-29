@@ -1,7 +1,10 @@
 package com.thales.musicapp.musicsdk
 
 import android.annotation.SuppressLint
-import android.app.*
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.media.MediaPlayer
@@ -9,26 +12,24 @@ import android.net.Uri
 import android.os.Handler
 import android.os.IBinder
 import android.os.Looper
-import android.provider.Settings
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.thales.musicapp.MainActivity
 import com.thales.musicapp.R
 import com.thales.musicapp.musicsdk.receivers.ControlActionsListener
 import com.thales.musicapp.musicsdk.utils.*
-import com.thales.musicapp.musicsdk.utils.FileUtils.*
 
 class MusicService: Service(), MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener, MediaPlayer.OnCompletionListener {
     val TAG = MusicService::class.java.canonicalName
     // Binder given to clients
     private val iBinder: IBinder = LocalBinder()
     var PLAY_INITIALLY = false
+    lateinit var musicFilesListner: MusicFilesListner
 
     companion object{
         private var mPlayer: MediaPlayer? = null
         fun getIsPlaying() = mPlayer?.isPlaying == true
     }
-
 
     override fun onBind(intent: Intent?): IBinder? {
         return iBinder
@@ -63,7 +64,13 @@ class MusicService: Service(), MediaPlayer.OnPreparedListener, MediaPlayer.OnErr
     }
 
     private fun getAllSongs() {
-        RetreiveMusicFiles.getAllAudios(this)
+
+        val musicFiles = RetreiveMusicFiles.getAllAudios(this)
+        if(!musicFiles.isNullOrEmpty())
+            ListnerConstant.musicFilesListner.songLoaded(musicFiles!!)
+        else
+            ListnerConstant.musicFilesListner.onError(Error(getString(R.string.song_loaded_error)))
+
     }
 
 
@@ -75,13 +82,6 @@ class MusicService: Service(), MediaPlayer.OnPreparedListener, MediaPlayer.OnErr
             val filename = "android.resource://" + this.packageName + "/raw/numsong"
             mPlayer = MediaPlayer.create(this, Uri.parse(filename))
             mPlayer?.start()
-
-           /* mPlayer!!.apply {
-                reset()
-                setDataSource(applicationContext, Uri.parse(filename))
-                prepare()
-                start()
-            }*/
         } catch (ignored: Exception) {
         }
     }
