@@ -12,16 +12,11 @@ class MusicProvider private constructor(context: Context, contentIntentActivity:
     val TAG = MusicProvider::class.java.canonicalName
 
     companion object {
-        lateinit var INSTANCE: MusicProvider
+            @Volatile
+            private var INSTANCE: MusicProvider? = null
 
-
-        fun getInstance(context: Context,contentIntentActivity: Activity) : MusicProvider {
-            if(INSTANCE==null) {
-                INSTANCE = MusicProvider(context,contentIntentActivity)
-                setContentIntentActivity(contentIntentActivity)
-            }
-            return INSTANCE
-        }
+            @Synchronized
+            fun getInstance(context: Context, contentIntentActivity: Activity): MusicProvider = INSTANCE ?: MusicProvider(context,contentIntentActivity).also { INSTANCE = it }
     }
 
     fun startMusicPlayer(context: Context){
