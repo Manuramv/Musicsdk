@@ -13,7 +13,7 @@ class MusicProvider private constructor(context: Context, contentIntentActivity:
 
     companion object {
             @Volatile
-            private var INSTANCE: MusicProvider? = null
+            var INSTANCE: MusicProvider? = null
 
             @Synchronized
             fun getInstance(context: Context, contentIntentActivity: Activity): MusicProvider = INSTANCE ?: MusicProvider(context,contentIntentActivity).also { INSTANCE = it }
