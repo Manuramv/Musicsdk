@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity(), SongClickListner {
         setupPermissions()
 
         startMusic.setOnClickListener({
-            MusicProvider.playSong(this,PLAYSONG)
+            MusicProvider.playSong(this)
         })
 
         stopMusic.setOnClickListener({
@@ -90,7 +90,6 @@ class MainActivity : AppCompatActivity(), SongClickListner {
             RECORD_REQUEST_CODE -> {
 
                 if (grantResults.isEmpty() || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-
                     Log.i(TAG, "Permission has been denied by user")
                 } else {
                     Log.i(TAG, "Permission has been granted by user")
@@ -100,8 +99,9 @@ class MainActivity : AppCompatActivity(), SongClickListner {
         }
     }
 
-    override fun onSongSelected(song: Song) {
-        Log.i(TAG, "on Song selected::"+ song?.filePath)
+    override fun onSongSelected(index: Int) {
+        Log.i(TAG, "on Song selected::"+ index)
+        MusicProvider.selectedSongFromList(this,index)
     }
 
 }

@@ -1,16 +1,14 @@
 package com.thales.musicapp.musicsdk.adapters
 
-import android.annotation.SuppressLint
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.inflate
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.thales.musicapp.R
 import com.thales.musicapp.musicsdk.`interface`.SongClickListner
 import com.thales.musicapp.musicsdk.models.Song
+import com.thales.musicapp.musicsdk.utils.FileUtils.getFileName
 
 
 class SongAdapter(val songClickListner: SongClickListner) : RecyclerView.Adapter<ViewHolder>() {
@@ -31,7 +29,7 @@ class SongAdapter(val songClickListner: SongClickListner) : RecyclerView.Adapter
     override fun getItemCount(): Int = items.size
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        return holder.bind(items[position], songClickListner)
+        return holder.bind(items[position], songClickListner,position)
     }
 }
 
@@ -39,12 +37,16 @@ class ViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
     val txtSongName = itemView.findViewById<TextView>(R.id.txtSongName)
     val txtArtistName = itemView.findViewById<TextView>(R.id.txtArtistName)
 
-    fun bind(item: Song,songClickListner: SongClickListner) {
-        txtSongName.text = item.name
+    fun bind(
+        item: Song,
+        songClickListner: SongClickListner,
+        position: Int
+    ) {
+        txtSongName.text = getFileName(item.name)
         txtArtistName.text = item.filePath
 
         itemView.setOnClickListener({
-            songClickListner.onSongSelected(item)
+            songClickListner.onSongSelected(position)
         })
     }
 

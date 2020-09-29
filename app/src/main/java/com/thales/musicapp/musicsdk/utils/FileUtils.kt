@@ -6,7 +6,7 @@ import com.thales.musicapp.musicsdk.models.Song
 import java.io.File
 import java.util.*
 
-object RetreiveMusicFiles {
+object FileUtils {
 
     fun getAllAudios(c: Context): List<Song>? {
         val files: MutableList<Song> =
@@ -30,5 +30,12 @@ object RetreiveMusicFiles {
             e.printStackTrace()
         }
         return files
+    }
+
+
+    fun getFileName(fileName: String): String? {
+        if (fileName.indexOf(".") > 0)
+            return fileName?.substring(0, fileName?.lastIndexOf("."));
+        else return ""
     }
 }

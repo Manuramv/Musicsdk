@@ -16,8 +16,11 @@ import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.thales.musicapp.MainActivity
 import com.thales.musicapp.R
+import com.thales.musicapp.musicsdk.models.Song
 import com.thales.musicapp.musicsdk.receivers.ControlActionsListener
 import com.thales.musicapp.musicsdk.utils.*
+import com.thales.musicapp.musicsdk.utils.FileUtils.getFileName
+import java.io.File
 
 class MusicService: Service(), MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener, MediaPlayer.OnCompletionListener {
     val TAG = MusicService::class.java.canonicalName
@@ -25,6 +28,8 @@ class MusicService: Service(), MediaPlayer.OnPreparedListener, MediaPlayer.OnErr
     private val iBinder: IBinder = LocalBinder()
     var PLAY_INITIALLY = false
     lateinit var musicFilesListner: MusicFilesListner
+    var  musicFiles :List<Song>?=null
+    var mCurrentSong: Song?=null
 
     companion object{
         private var mPlayer: MediaPlayer? = null
@@ -56,6 +61,7 @@ class MusicService: Service(), MediaPlayer.OnPreparedListener, MediaPlayer.OnErr
             STOPSONG -> stopSong()
             PAUSESONG -> pauseSong()
             GETSONGS -> getAllSongs()
+            PLAYSELECTEDSONGFROMLIST -> playSelectedSongFromList(intent)
         }
 
         setupNotification()
@@ -65,12 +71,26 @@ class MusicService: Service(), MediaPlayer.OnPreparedListener, MediaPlayer.OnErr
 
     private fun getAllSongs() {
 
-        val musicFiles = RetreiveMusicFiles.getAllAudios(this)
+        musicFiles = FileUtils.getAllAudios(this)
         if(!musicFiles.isNullOrEmpty())
             ListnerConstant.musicFilesListner.songLoaded(musicFiles!!)
         else
             ListnerConstant.musicFilesListner.onError(Error(getString(R.string.song_loaded_error)))
 
+    }
+
+    private fun playSelectedSongFromList(intent: Intent) {
+        if(!musicFiles.isNullOrEmpty()){
+            //val filename = "android.resource://" + this.packageName + "/raw/numsong"
+            val pos = intent.getIntExtra(SELECTEDSONGINDEX, 0)
+            Log.d(TAG,"seleced index::"+pos)
+            mPlayer?.reset()
+            if(musicFiles?.get(pos)!=null)
+                mCurrentSong = musicFiles?.get(pos)!!
+            val songPath = Uri.fromFile(File(mCurrentSong?.filePath))
+            mPlayer = MediaPlayer.create(this,songPath)
+            mPlayer?.start()
+        }
     }
 
 
@@ -134,8 +154,8 @@ class MusicService: Service(), MediaPlayer.OnPreparedListener, MediaPlayer.OnErr
 
     @SuppressLint("NewApi")
     private fun setupNotification() {
-        val title = "music title" //later read the  name from the music
-        val artist = "Manu" //later read the  name from the music
+        val title = "Thales Music Player" //later read the  name from the music
+        val artist = getFileName(mCurrentSong?.name?:"") //later read the  name from the music
         /*val artist = mCurrSong?.artist ?: ""
         val playPauseIcon = if (getIsPlaying()) R.drawable.ic_pause_vector else R.drawable.ic_play_vector*/
 
