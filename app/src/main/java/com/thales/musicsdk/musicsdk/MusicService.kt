@@ -18,7 +18,7 @@ import com.thales.musicsdk.musicsdk.utils.*
 import com.thales.musicsdk.musicsdk.utils.FileUtils.getFileName
 import java.io.File
 
-class MusicService: Service(), MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener, MediaPlayer.OnCompletionListener {
+internal class MusicService: Service(), MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener, MediaPlayer.OnCompletionListener {
     val TAG = MusicService::class.java.canonicalName
     // Binder given to clients
     private val iBinder: IBinder = LocalBinder()
@@ -26,9 +26,15 @@ class MusicService: Service(), MediaPlayer.OnPreparedListener, MediaPlayer.OnErr
     var mCurrentSong: Song?=null
     var pos:Int = 0
 
+
     companion object{
         private var mPlayer: MediaPlayer? = null
+        private lateinit var contentIntentActivity: Activity
+
         fun getIsPlaying() = mPlayer?.isPlaying == true
+        fun setContentIntentActivity(activity: Activity)  {
+            contentIntentActivity = activity
+        }
     }
 
     override fun onBind(intent: Intent?): IBinder? {
@@ -165,7 +171,7 @@ class MusicService: Service(), MediaPlayer.OnPreparedListener, MediaPlayer.OnErr
             .setWhen(notifWhen)
             .setShowWhen(showWhen)
             .setUsesChronometer(usesChronometer)
-            //.setContentIntent(getContentIntent())
+            .setContentIntent(getContentIntent())
             .setOngoing(ongoing)
             .setChannelId(NOTIFICATION_CHANNEL)
             .setStyle(androidx.media.app.NotificationCompat.MediaStyle()
@@ -187,8 +193,8 @@ class MusicService: Service(), MediaPlayer.OnPreparedListener, MediaPlayer.OnErr
 
     }
 
-    private fun <T> getContentIntent(activity: Class<T>): PendingIntent {
-        val contentIntent = Intent(this, activity)
+    private fun  getContentIntent(): PendingIntent {
+        val contentIntent = Intent(this, contentIntentActivity::class.java)
         return PendingIntent.getActivity(this, 0, contentIntent, 0)
     }
 

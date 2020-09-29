@@ -1,13 +1,28 @@
 package com.thales.musicsdk.musicsdk
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.util.Log
+import com.thales.musicsdk.musicsdk.MusicService.Companion.setContentIntentActivity
 import com.thales.musicsdk.musicsdk.utils.*
 import com.thales.musicsdk.musicsdk.utils.ListnerConstant
 
-object MusicProvider {
+class MusicProvider private constructor(context: Context, contentIntentActivity: Activity) {
     val TAG = MusicProvider::class.java.canonicalName
+
+    companion object {
+        lateinit var INSTANCE: MusicProvider
+
+
+        fun getInstance(context: Context,contentIntentActivity: Activity) : MusicProvider {
+            if(INSTANCE==null) {
+                INSTANCE = MusicProvider(context,contentIntentActivity)
+                setContentIntentActivity(contentIntentActivity)
+            }
+            return INSTANCE
+        }
+    }
 
     fun startMusicPlayer(context: Context){
         Log.d(TAG, "called startMusicPlayer")
@@ -54,6 +69,5 @@ object MusicProvider {
         }
 
     }
-
 
     }
