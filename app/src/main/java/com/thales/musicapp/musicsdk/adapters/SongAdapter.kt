@@ -9,10 +9,11 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.thales.musicapp.R
+import com.thales.musicapp.musicsdk.`interface`.SongClickListner
 import com.thales.musicapp.musicsdk.models.Song
 
 
-class SongAdapter : RecyclerView.Adapter<ViewHolder>() {
+class SongAdapter(val songClickListner: SongClickListner) : RecyclerView.Adapter<ViewHolder>() {
 
     private val items = ArrayList<Song>()
 
@@ -30,7 +31,7 @@ class SongAdapter : RecyclerView.Adapter<ViewHolder>() {
     override fun getItemCount(): Int = items.size
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        return holder.bind(items[position])
+        return holder.bind(items[position], songClickListner)
     }
 }
 
@@ -38,9 +39,13 @@ class ViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
     val txtSongName = itemView.findViewById<TextView>(R.id.txtSongName)
     val txtArtistName = itemView.findViewById<TextView>(R.id.txtArtistName)
 
-    fun bind(item: Song) {
+    fun bind(item: Song,songClickListner: SongClickListner) {
         txtSongName.text = item.name
         txtArtistName.text = item.filePath
+
+        itemView.setOnClickListener({
+            songClickListner.onSongSelected(item)
+        })
     }
 
 }
