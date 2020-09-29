@@ -16,7 +16,11 @@ class MusicProvider private constructor(context: Context, contentIntentActivity:
             var INSTANCE: MusicProvider? = null
 
             @Synchronized
-            fun getInstance(context: Context, contentIntentActivity: Activity): MusicProvider = INSTANCE ?: MusicProvider(context,contentIntentActivity).also { INSTANCE = it }
+            fun getInstance(context: Context, contentIntentActivity: Activity): MusicProvider
+                    = INSTANCE ?: MusicProvider(context,contentIntentActivity).also {
+                INSTANCE = it
+                setContentIntentActivity(activity = contentIntentActivity)
+            }
     }
 
     fun startMusicPlayer(context: Context){
