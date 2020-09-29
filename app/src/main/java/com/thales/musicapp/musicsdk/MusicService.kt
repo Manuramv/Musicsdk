@@ -16,6 +16,7 @@ import com.thales.musicapp.MainActivity
 import com.thales.musicapp.R
 import com.thales.musicapp.musicsdk.receivers.ControlActionsListener
 import com.thales.musicapp.musicsdk.utils.*
+import com.thales.musicapp.musicsdk.utils.FileUtils.*
 
 class MusicService: Service(), MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener, MediaPlayer.OnCompletionListener {
     val TAG = MusicService::class.java.canonicalName
@@ -38,6 +39,7 @@ class MusicService: Service(), MediaPlayer.OnPreparedListener, MediaPlayer.OnErr
         Log.d(TAG,"muscis service started, inside oncreate")
         initMusicPlayer()
 
+
         //here we can start playing t
     }
 
@@ -52,11 +54,16 @@ class MusicService: Service(), MediaPlayer.OnPreparedListener, MediaPlayer.OnErr
             PLAYSONG -> playSong()
             STOPSONG -> stopSong()
             PAUSESONG -> pauseSong()
+            GETSONGS -> getAllSongs()
         }
 
         setupNotification()
         return START_NOT_STICKY
 
+    }
+
+    private fun getAllSongs() {
+        RetreiveMusicFiles.getAllAudios(this)
     }
 
 
@@ -121,6 +128,8 @@ class MusicService: Service(), MediaPlayer.OnPreparedListener, MediaPlayer.OnErr
         Log.d(TAG, "song event received::stop")
         PLAY_INITIALLY = false
         mPlayer?.pause()
+
+
     }
 
     @SuppressLint("NewApi")
