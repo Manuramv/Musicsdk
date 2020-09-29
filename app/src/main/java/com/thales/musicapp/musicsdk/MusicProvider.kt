@@ -25,6 +25,13 @@ object MusicProvider {
             context.startService(this)
         }
     }
+
+    fun pauseSong(context: Context){
+        Intent(context, MusicService::class.java).apply {
+            this.action = PAUSESONG
+            context.startService(this)
+        }
+    }
     fun selectedSongFromList(context: Context,index: Int){
         Intent(context, MusicService::class.java).apply {
             this.action = PLAYSELECTEDSONGFROMLIST
@@ -33,9 +40,9 @@ object MusicProvider {
         }
     }
 
-    fun stopSong(context: Context,action:String) {
+    fun stopSong(context: Context) {
         Intent(context, MusicService::class.java).apply {
-            this.action = action
+            this.action = STOPSONG
             context.startService(this)
         }
 

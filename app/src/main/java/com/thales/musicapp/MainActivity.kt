@@ -35,9 +35,12 @@ class MainActivity : AppCompatActivity(), SongClickListner {
         startMusic.setOnClickListener({
             MusicProvider.playSong(this)
         })
+        pauseMusic.setOnClickListener({
+            MusicProvider.pauseSong(this)
+        })
 
         stopMusic.setOnClickListener({
-            MusicProvider.stopSong(this,STOPSONG)
+            MusicProvider.stopSong(this)
         })
         getSongs.setOnClickListener({
             MusicProvider.getSongs(this, object :MusicFilesListner{

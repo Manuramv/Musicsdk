@@ -26,10 +26,9 @@ class MusicService: Service(), MediaPlayer.OnPreparedListener, MediaPlayer.OnErr
     val TAG = MusicService::class.java.canonicalName
     // Binder given to clients
     private val iBinder: IBinder = LocalBinder()
-    var PLAY_INITIALLY = false
-    lateinit var musicFilesListner: MusicFilesListner
     var  musicFiles :List<Song>?=null
     var mCurrentSong: Song?=null
+    var pos:Int = 0
 
     companion object{
         private var mPlayer: MediaPlayer? = null
@@ -44,18 +43,12 @@ class MusicService: Service(), MediaPlayer.OnPreparedListener, MediaPlayer.OnErr
         super.onCreate()
         Log.d(TAG,"muscis service started, inside oncreate")
         initMusicPlayer()
-
-
-        //here we can start playing t
     }
 
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
         Log.d("tag","inside onStartCommand::"+ intent.action)
-
         val action = intent.action
-
-
         when(action) {
             PLAYSONG -> playSong()
             STOPSONG -> stopSong()
@@ -70,19 +63,17 @@ class MusicService: Service(), MediaPlayer.OnPreparedListener, MediaPlayer.OnErr
     }
 
     private fun getAllSongs() {
-
         musicFiles = FileUtils.getAllAudios(this)
         if(!musicFiles.isNullOrEmpty())
             ListnerConstant.musicFilesListner.songLoaded(musicFiles!!)
         else
             ListnerConstant.musicFilesListner.onError(Error(getString(R.string.song_loaded_error)))
-
     }
 
     private fun playSelectedSongFromList(intent: Intent) {
         if(!musicFiles.isNullOrEmpty()){
             //val filename = "android.resource://" + this.packageName + "/raw/numsong"
-            val pos = intent.getIntExtra(SELECTEDSONGINDEX, 0)
+            pos = intent.getIntExtra(SELECTEDSONGINDEX, 0)
             Log.d(TAG,"seleced index::"+pos)
             mPlayer?.reset()
             if(musicFiles?.get(pos)!=null)
@@ -99,24 +90,16 @@ class MusicService: Service(), MediaPlayer.OnPreparedListener, MediaPlayer.OnErr
             return
         }
         try {
-            val filename = "android.resource://" + this.packageName + "/raw/numsong"
-            mPlayer = MediaPlayer.create(this, Uri.parse(filename))
+            if(musicFiles?.get(pos)!=null)
+                mCurrentSong = musicFiles?.get(pos)!!
+            val songPath = Uri.fromFile(File(mCurrentSong?.filePath))
+            mPlayer = MediaPlayer.create(this, songPath)
             mPlayer?.start()
         } catch (ignored: Exception) {
         }
     }
 
-
-    override fun onStart(intent: Intent?, startId: Int) {
-        super.onStart(intent, startId)
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-    }
-
     override fun onPrepared(mp: MediaPlayer?) {
-        //if(PLAY_INITIALLY)
         mp?.start()
     }
 
@@ -133,20 +116,17 @@ class MusicService: Service(), MediaPlayer.OnPreparedListener, MediaPlayer.OnErr
     //play song
     private fun playSong(){
         Log.d(TAG, "song event received::play")
-        PLAY_INITIALLY = true
         initMusicPlayer()
         mPlayer?.start()
     }
     private fun stopSong(){
         Log.d(TAG, "song event received::stop")
-        PLAY_INITIALLY = false
         destroyPlayer()
     }
 
 
     private fun pauseSong(){
         Log.d(TAG, "song event received::stop")
-        PLAY_INITIALLY = false
         mPlayer?.pause()
 
 
