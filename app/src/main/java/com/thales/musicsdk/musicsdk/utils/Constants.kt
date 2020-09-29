@@ -1,4 +1,4 @@
-package com.thales.musicapp.musicsdk.utils
+package com.thales.musicsdk.musicsdk.utils
 
 const val PLAYSONG = "playsong"
 const val PLAYSELECTEDSONGFROMLIST = "playsongfromlist"

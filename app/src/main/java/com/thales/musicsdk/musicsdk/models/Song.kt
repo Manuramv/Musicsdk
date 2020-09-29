@@ -1,4 +1,4 @@
-package com.thales.musicapp.musicsdk.models
+package com.thales.musicsdk.musicsdk.models
 
 data class Song(
     val name: String,

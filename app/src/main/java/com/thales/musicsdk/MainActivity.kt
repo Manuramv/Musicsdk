@@ -1,4 +1,4 @@
-package com.thales.musicapp
+package com.thales.musicsdk
 
 import android.Manifest
 import android.content.pm.PackageManager
@@ -6,18 +6,13 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContentProviderCompat.requireContext
-import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.*
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.thales.musicapp.musicsdk.MusicProvider
-import com.thales.musicapp.musicsdk.`interface`.SongClickListner
-import com.thales.musicapp.musicsdk.adapters.SongAdapter
-import com.thales.musicapp.musicsdk.models.Song
-import com.thales.musicapp.musicsdk.utils.GETSONGS
-import com.thales.musicapp.musicsdk.utils.MusicFilesListner
-import com.thales.musicapp.musicsdk.utils.PLAYSONG
-import com.thales.musicapp.musicsdk.utils.STOPSONG
+import com.thales.musicsdk.musicsdk.MusicProvider
+import com.thales.musicsdk.musicsdk.`interface`.SongClickListner
+import com.thales.musicsdk.musicsdk.adapters.SongAdapter
+import com.thales.musicsdk.musicsdk.models.Song
+import com.thales.musicsdk.musicsdk.utils.MusicFilesListner
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), SongClickListner {

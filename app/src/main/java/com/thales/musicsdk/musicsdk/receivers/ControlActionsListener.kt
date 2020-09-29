@@ -1,10 +1,10 @@
-package com.thales.musicapp.musicsdk.receivers
+package com.thales.musicsdk.musicsdk.receivers
 
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import androidx.core.content.ContextCompat.startForegroundService
-import com.thales.musicapp.musicsdk.MusicService
+import com.thales.musicsdk.musicsdk.MusicService
 
 class ControlActionsListener : BroadcastReceiver() {
 

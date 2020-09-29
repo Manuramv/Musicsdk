@@ -1,4 +1,4 @@
-package com.thales.musicapp
+package com.thales.musicsdk
 
 import org.junit.Test
 

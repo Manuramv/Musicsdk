@@ -1,4 +1,4 @@
-package com.thales.musicapp.musicsdk
+package com.thales.musicsdk.musicsdk
 
 import android.annotation.SuppressLint
 import android.app.NotificationChannel
@@ -14,12 +14,12 @@ import android.os.IBinder
 import android.os.Looper
 import android.util.Log
 import androidx.core.app.NotificationCompat
-import com.thales.musicapp.MainActivity
-import com.thales.musicapp.R
-import com.thales.musicapp.musicsdk.models.Song
-import com.thales.musicapp.musicsdk.receivers.ControlActionsListener
-import com.thales.musicapp.musicsdk.utils.*
-import com.thales.musicapp.musicsdk.utils.FileUtils.getFileName
+import com.thales.musicsdk.MainActivity
+import com.thales.musicsdk.R
+import com.thales.musicsdk.musicsdk.models.Song
+import com.thales.musicsdk.musicsdk.receivers.ControlActionsListener
+import com.thales.musicsdk.musicsdk.utils.*
+import com.thales.musicsdk.musicsdk.utils.FileUtils.getFileName
 import java.io.File
 
 class MusicService: Service(), MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener, MediaPlayer.OnCompletionListener {

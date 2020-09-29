@@ -1,12 +1,10 @@
-package com.thales.musicapp.musicsdk
+package com.thales.musicsdk.musicsdk
 
 import android.content.Context
 import android.content.Intent
 import android.util.Log
-import androidx.core.content.ContextCompat.startForegroundService
-import com.thales.musicapp.musicsdk.models.Song
-import com.thales.musicapp.musicsdk.utils.*
-import com.thales.musicapp.musicsdk.utils.ListnerConstant
+import com.thales.musicsdk.musicsdk.utils.*
+import com.thales.musicsdk.musicsdk.utils.ListnerConstant
 
 object MusicProvider {
     val TAG = MusicProvider::class.java.canonicalName

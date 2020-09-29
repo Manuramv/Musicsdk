@@ -1,9 +1,8 @@
-package com.thales.musicapp.musicsdk.utils
+package com.thales.musicsdk.musicsdk.utils
 
 import android.content.Context
 import android.provider.MediaStore
-import com.thales.musicapp.musicsdk.models.Song
-import java.io.File
+import com.thales.musicsdk.musicsdk.models.Song
 import java.util.*
 
 object FileUtils {

@@ -1,14 +1,14 @@
-package com.thales.musicapp.musicsdk.adapters
+package com.thales.musicsdk.musicsdk.adapters
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.thales.musicapp.R
-import com.thales.musicapp.musicsdk.`interface`.SongClickListner
-import com.thales.musicapp.musicsdk.models.Song
-import com.thales.musicapp.musicsdk.utils.FileUtils.getFileName
+import com.thales.musicsdk.R
+import com.thales.musicsdk.musicsdk.`interface`.SongClickListner
+import com.thales.musicsdk.musicsdk.models.Song
+import com.thales.musicsdk.musicsdk.utils.FileUtils.getFileName
 
 
 class SongAdapter(val songClickListner: SongClickListner) : RecyclerView.Adapter<ViewHolder>() {

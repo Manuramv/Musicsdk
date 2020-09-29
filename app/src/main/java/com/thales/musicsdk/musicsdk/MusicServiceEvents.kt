@@ -1,4 +1,4 @@
-package com.thales.musicapp.musicsdk
+package com.thales.musicsdk.musicsdk
 
 interface MusicServiceEvents {
 
