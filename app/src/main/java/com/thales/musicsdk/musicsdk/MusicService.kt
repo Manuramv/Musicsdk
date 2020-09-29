@@ -1,10 +1,7 @@
 package com.thales.musicsdk.musicsdk
 
 import android.annotation.SuppressLint
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.app.PendingIntent
-import android.app.Service
+import android.app.*
 import android.content.Context
 import android.content.Intent
 import android.media.MediaPlayer
@@ -14,7 +11,6 @@ import android.os.IBinder
 import android.os.Looper
 import android.util.Log
 import androidx.core.app.NotificationCompat
-import com.thales.musicsdk.MainActivity
 import com.thales.musicsdk.R
 import com.thales.musicsdk.musicsdk.models.Song
 import com.thales.musicsdk.musicsdk.receivers.ControlActionsListener
@@ -169,7 +165,7 @@ class MusicService: Service(), MediaPlayer.OnPreparedListener, MediaPlayer.OnErr
             .setWhen(notifWhen)
             .setShowWhen(showWhen)
             .setUsesChronometer(usesChronometer)
-            .setContentIntent(getContentIntent())
+            //.setContentIntent(getContentIntent())
             .setOngoing(ongoing)
             .setChannelId(NOTIFICATION_CHANNEL)
             .setStyle(androidx.media.app.NotificationCompat.MediaStyle()
@@ -191,8 +187,8 @@ class MusicService: Service(), MediaPlayer.OnPreparedListener, MediaPlayer.OnErr
 
     }
 
-    private fun getContentIntent(): PendingIntent {
-        val contentIntent = Intent(this, MainActivity::class.java)
+    private fun <T> getContentIntent(activity: Class<T>): PendingIntent {
+        val contentIntent = Intent(this, activity)
         return PendingIntent.getActivity(this, 0, contentIntent, 0)
     }
 
